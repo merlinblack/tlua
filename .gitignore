@@ -1,0 +1,5 @@
+*~
+*.o
+tlua
+gitversioning.h
+deps
