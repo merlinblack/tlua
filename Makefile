@@ -13,15 +13,18 @@ INSTALLDIR:=
 
 # ###################################################################
 
-VPATH = $(SOURCEDIR)
+SUFFIXES += .d
+VPATH += src
 
-.SILENT: $(DEPS) $(DEPDIR) $(OBJDIR) clean
+#.SILENT: $(DEPS) $(DEPDIR) $(OBJDIR) clean
+$(V).SILENT:
 
-OBJECTS=$(addprefix $(OBJDIR)/,$(SOURCES:.cpp=.o))
-DEPS=$(addprefix $(DEPDIR)/,$(SOURCES:.cpp=.d))
+OBJECTS=$(addprefix $(OBJDIR)/,$(notdir $(SOURCES:.cpp=.o)))
+DEPS=$(addprefix $(DEPDIR)/,$(notdir $(SOURCES:.cpp=.d)))
 
 .PHONY: all
 all:	$(OBJDIR) $(SOURCES) $(DEPS) gitversioning.h $(EXECUTABLE)
+	@echo 'Up to date'
 
 .PHONY: install
 install:
@@ -29,6 +32,7 @@ install:
 	cp $(EXECUTABLE) $(INSTALLABLE_SCRIPTS) $(INSTALLDIR)
 
 $(EXECUTABLE):	$(OBJECTS)
+	@echo 'Linking executable $@'
 	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
 
 # Squeeky
@@ -44,6 +48,7 @@ clean:
 # #############
 #
 $(OBJDIR)/%.o: %.cpp | $(OBJDIR)
+	@echo 'Compiling $<'
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR):
@@ -57,16 +62,16 @@ $(OBJDIR):
 
 $(DEPDIR)/%.d: %.cpp gitversioning.h | $(DEPDIR)
 	@echo "Caching dependency info for: $<"
-	@$(CC) $(CXXFLAGS) -MF"$@" -MG -MP -MM -MT"$(OBJDIR)/$(<:.cpp=.o) $@" "$<"
+	$(CC) $(CXXFLAGS) -MF"$@" -MG -MP -MM -MT"$(OBJDIR)/$(notdir $(<:.cpp=.o)) $@" "$<"
 
 $(DEPDIR):
 	mkdir -p $(DEPDIR)
 
 ifeq (0,$(words $(findstring clean, $(MAKECMDGOALS))))
-	# Don't make these, only to clean them out again.
+# Don't make these, only to clean them out again.
 -include $(DEPS)
 endif
 
 # gitversioning.h is remade when either git tags or heads change.
 gitversioning.h: .git/refs/tags .git/refs/heads .git/HEAD
-	@./gitversioning.sh
+	./gitversioning.sh
