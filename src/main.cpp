@@ -100,6 +100,7 @@ void update()
     output.refresh();
     luaInterpreter.clearOutput();
 
+    mvprintw( 0, COLS-15, "Coroutines: %3d", luaInterpreter.numCoroutines() );
     mvprintw( 1, 0, "%s%s", prompt.c_str(), commandline.getText().c_str() );
     clrtoeol();
     // Place cursor

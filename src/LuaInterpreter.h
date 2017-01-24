@@ -65,6 +65,9 @@ class LuaInterpreter
         // Resume a prevously yielded chunk.
         State resume();
 
+        // Get the number of coroutines.
+        int numCoroutines() { return mCoroutines.size(); }
+
     protected:
         lua_State *mL;
         CoroutineList mCoroutines;
