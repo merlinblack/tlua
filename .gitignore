@@ -3,3 +3,4 @@
 tlua
 gitversioning.h
 deps
+*.swp
