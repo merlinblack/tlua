@@ -263,7 +263,7 @@ static const string dumpstack_str(lua_State* L )
 
     for (i = 1; i <= top; i++)
     {
-        ss << i << " " << luaL_typename(L,i) << " - ";
+        ss << i << "> " << luaL_typename(L,i) << " - ";
         switch (lua_type(L, i))
         {
             case LUA_TNUMBER:
