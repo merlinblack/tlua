@@ -7,7 +7,7 @@
 #include "LuaInterpreter.h"
 #include "utf8.h"
 
-#define TICKRATE 1000
+#define TICKRATE 100
 
 lua_State* init_lua();
 bool init_ncurses();
@@ -27,7 +27,8 @@ int main( int argc, char* argv[] )
 
     lua_State* L = init_lua();
     luaInterpreter.init( L );
-    luaL_dostring( L, "print=interpreterOutput" );
+    //luaL_dostring( L, "print=interpreterOutput" );
+    luaL_dofile( L, "tlua.lua" );
     init_ncurses();
     printw( "Press ESC, or type 'quit' or 'exit' to exit..." );
 
