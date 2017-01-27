@@ -104,6 +104,7 @@ void update()
     mvprintw( 0, COLS-15, "Coroutines: %3d", luaInterpreter.numCoroutines() );
     mvprintw( 1, 0, "%s%s", prompt.c_str(), commandline.getText().c_str() );
     clrtoeol();
+    mvprintw( 1, COLS-15, "Mem used: %5d", lua_gc( luaInterpreter.getLuaInstance(), LUA_GCCOUNT, 0 ) );
     // Place cursor
     move( 1, utf8::distance( prompt.begin(), prompt.end() ) + commandline.getPosition());
 }
