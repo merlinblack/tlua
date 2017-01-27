@@ -7,6 +7,8 @@
 #include "LuaInterpreter.h"
 #include "utf8.h"
 
+#include "../gitversioning.h"
+
 #define TICKRATE 100
 
 lua_State* init_lua();
@@ -35,6 +37,7 @@ int main( int argc, char* argv[] )
     output.create( LINES-7, COLS-2, 5, 1 );
     output.scrollok();
     wbkgd( output.getwin(), COLOR_PAIR(1));
+    output.print( "%s\n", GIT_REPO_REVISION );
 
     resize();
 
