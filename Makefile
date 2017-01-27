@@ -16,9 +16,6 @@ INSTALLDIR:=
 SUFFIXES += .d
 VPATH += src
 
-#.SILENT: $(DEPS) $(DEPDIR) $(OBJDIR) clean
-$(V).SILENT:
-
 OBJECTS=$(addprefix $(OBJDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 DEPS=$(addprefix $(DEPDIR)/,$(notdir $(SOURCES:.cpp=.d)))
 
@@ -75,3 +72,5 @@ endif
 # gitversioning.h is remade when either git tags or heads change.
 gitversioning.h: .git/refs/tags .git/refs/heads .git/HEAD
 	./gitversioning.sh
+
+$(V).SILENT:
