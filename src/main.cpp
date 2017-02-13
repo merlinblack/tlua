@@ -9,6 +9,8 @@
 
 #include "../gitversioning.h"
 
+#include "../bindings/register.h"
+
 #define TICKRATE 100
 
 lua_State* init_lua();
@@ -22,6 +24,12 @@ bool fShouldStop;
 Window output;
 EditString commandline;
 LuaInterpreter luaInterpreter;
+
+int halt( lua_State* L )
+{
+    fShouldStop = true;
+    return 0;
+}
 
 int main( int argc, char* argv[] )
 {
@@ -136,6 +144,8 @@ lua_State* init_lua()
 {
     lua_State* L = luaL_newstate();
     luaL_openlibs( L );
+    lua_register( L, "halt", halt );
+    registerBindings( L );
 
     return L;
 }
