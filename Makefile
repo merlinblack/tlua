@@ -5,7 +5,7 @@ LIBS:=$(shell ncursesw6-config --libs) -llua
 CXXFLAGS:=$(shell ncursesw6-config --cflags) -g3 -w -Wall
 EXECUTABLE:=tlua
 INSTALLABLE_SCRIPTS:=
-SOURCES:=main.cpp EditString.cpp LuaInterpreter.cpp
+SOURCES:=main.cpp EditString.cpp LuaInterpreter.cpp register.cpp
 SOURCEDIR:=src
 OBJDIR:=obj
 DEPDIR:=deps
@@ -14,7 +14,7 @@ INSTALLDIR:=
 # ###################################################################
 
 SUFFIXES += .d
-VPATH += src
+VPATH=src:bindings
 
 OBJECTS=$(addprefix $(OBJDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 DEPS=$(addprefix $(DEPDIR)/,$(notdir $(SOURCES:.cpp=.d)))
