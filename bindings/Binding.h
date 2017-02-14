@@ -67,6 +67,18 @@ struct Binding {
         // 2 - key
         lua_getmetatable( L, 1 );
         // 3 - class metatable
+        if( lua_isnumber( L, 2 ) ) { // Array access
+            lua_pushliteral( L, "__arrayindex" );
+            lua_gettable( L, 3 );
+            if( lua_type( L, 4 ) == LUA_TFUNCTION ) {
+                lua_pushvalue( L, 1 );
+                lua_pushvalue( L, 2 );
+                lua_call( L, 2, 1 );
+            } else {
+                luaL_error( L, "Attempt to index without __arrayindex" );
+            }
+            return 1;
+        }
         lua_pushvalue( L, 2 ); // Key
         lua_gettable( L, 3 );
         if( lua_type( L, 4 ) != LUA_TNIL ) { // Found in metatable.
@@ -101,6 +113,19 @@ struct Binding {
         // 2 - key
         // 3 - value
         lua_getmetatable( L, 1 );
+        if( lua_isnumber( L, 2 ) ) { // Array access
+            lua_pushliteral( L, "__arraynewindex" );
+            lua_gettable( L, 4 );
+            if( lua_type( L, 5 ) == LUA_TFUNCTION ) {
+                lua_pushvalue( L, 1 );
+                lua_pushvalue( L, 2 );
+                lua_pushvalue( L, 3 );
+                lua_call( L, 3, 1 );
+            } else {
+                luaL_error( L, "Attempt to assign to index without __arraynewindex" );
+            }
+            return 1;
+        }
         // 4 - class metatable
         lua_pushliteral( L, "__properties" );
         lua_gettable( L, 4 );
@@ -148,7 +173,7 @@ struct Binding {
     {
         void* ud = luaL_checkudata( L, index, B::class_name );
 
-        return (std::shared_ptr<T>*)ud;
+        return *((std::shared_ptr<T>*)ud);
     }
 
     static void checkArgCount( lua_State *L, int expected )
