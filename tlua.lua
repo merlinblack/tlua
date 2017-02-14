@@ -25,6 +25,8 @@ function delay( seconds, func )
 
     local start = os.time();
 
+    yield(); -- yelid at least once.
+
     while( os.difftime( os.time(), start ) < seconds ) do
         yield();
     end
