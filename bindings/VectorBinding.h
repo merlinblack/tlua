@@ -57,7 +57,7 @@ struct VectorBinding: public Binding<VectorBinding, Vector> {
         checkArgCount( L, 2 );
 
         VectorPtr self  = fromStack( L, 1 );
-        VectorPtr other = fromStack( L, 1 );
+        VectorPtr other = fromStack( L, 2 );
 
         self->swap( *other );
 
