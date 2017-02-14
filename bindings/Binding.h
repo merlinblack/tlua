@@ -120,11 +120,11 @@ struct Binding {
                 lua_pushvalue( L, 1 );
                 lua_pushvalue( L, 2 );
                 lua_pushvalue( L, 3 );
-                lua_call( L, 3, 1 );
+                lua_call( L, 3, 0 );
             } else {
                 luaL_error( L, "Attempt to assign to index without __arraynewindex" );
             }
-            return 1;
+            return 0;
         }
         // 4 - class metatable
         lua_pushliteral( L, "__properties" );
