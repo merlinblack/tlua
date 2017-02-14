@@ -29,7 +29,7 @@ function delay( seconds, func )
         yield();
     end
 
-    func()
+    return func() -- tail call.
 end
 
 print( '\ntlua.lua loaded\n' )
