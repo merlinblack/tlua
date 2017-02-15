@@ -220,9 +220,16 @@ void LuaInterpreter::reportStack( lua_State* thread )
 {
     // Report stack contents
     // In the case of a yielded chunk these are the parameters to yield.
-    if ( lua_gettop(thread) > 0)
+    if( mState == LI_ERROR ) {
+      lua_getglobal( thread, "print" );
+      lua_pushliteral( thread, "Error" );
+      lua_pushvalue( thread, -3 );
+      lua_pcall(thread, 2, 0, 0);
+      lua_settop( thread, 0 );
+      mState = LI_READY;
+    }
+    else if ( lua_gettop(thread) > 0)
     {
-      //dumpstack( thread, "reportStack" );
       string stack = dumpstack_str( thread );
       lua_settop( thread, 0 );
       lua_getglobal( thread, "print" );
